@@ -108,19 +108,15 @@ public class Sonar extends PApplet {
 	}
 	
 	public int nextDirection(int currentDirection) {
-		if(currentDirection == numberDirections-1)
-			return 0;
-		else
-			currentDirection++;
-		return currentDirection;
+		if(currentDirection != numberDirections-1)
+			return ++currentDirection;
+		return 0;
 	}
 	
 	public int prevDirection(int currentDirection) {
-		if(currentDirection == 0)
-			return numberDirections-1;
-		else
-			currentDirection--;
-		return currentDirection;
+		if(currentDirection != 0)
+			return --currentDirection;
+		return numberDirections-1;
 	}
 	
 	
