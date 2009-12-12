@@ -7,6 +7,7 @@ public class Enemy {
 	float ypos;
 	float xspeed=0.1f; 
 	float yspeed=0.1f;
+	
 	PApplet parent; // The parent PApplet that we will render ourselves onto
 
 	Enemy(PApplet p) {
