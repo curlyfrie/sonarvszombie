@@ -22,6 +22,8 @@ public class Sonar extends PApplet {
 	
 	private Player player;
 	private int enemyTimer;
+	private int midX;
+	private int midY;
 	/**
 	 * {@value Key: Direction} {@value List of Enemies in this direction}
 	 * */
@@ -37,11 +39,23 @@ public class Sonar extends PApplet {
 
 		player = new Player(this);
 		// createEnemies();
+		midX = width/2;
+		midY = height/2;
 	}
 
 	public void draw() {
 		background(255);
-		fill(255);
+		stroke(0);
+		if(player.getViewDirection() == NORTH)
+			line(midX, midY, midX, midY-10);
+		else if(player.getViewDirection() == SOUTH)
+			line(midX, midY, midX, midY+10);
+		else if(player.getViewDirection() == WEST)
+			line(midX, midY, midX-10, midY);
+		else if(player.getViewDirection() == EAST)
+			line(midX, midY, midX+10, midY);
+		
+		//fill(255);
 		// ellipse(width / 2, height / 2, width, height);
 
 		if (!enemies.isEmpty()) {
