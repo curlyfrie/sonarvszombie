@@ -17,10 +17,10 @@ public class MyProcessingSketch extends PApplet {
 	private boolean east;
 
 	// list of zombies for each direction
-	private ArrayList<Integer> northernList;
-	private ArrayList<Integer> southernList;
-	private ArrayList<Integer> westernList;
-	private ArrayList<Integer> easternList;
+	private ArrayList<AudioPlayer> northernList;
+	private ArrayList<AudioPlayer> southernList;
+	private ArrayList<AudioPlayer> westernList;
+	private ArrayList<AudioPlayer> easternList;
 
 	private Minim minim;
 	private AudioPlayer soundEffect;
@@ -32,10 +32,10 @@ public class MyProcessingSketch extends PApplet {
 		size(200, 200);
 		background(0);
 
-		northernList = new ArrayList<Integer>();
-		southernList = new ArrayList<Integer>();
-		easternList = new ArrayList<Integer>();
-		westernList = new ArrayList<Integer>();
+		northernList = new ArrayList<AudioPlayer>();
+		southernList = new ArrayList<AudioPlayer>();
+		easternList = new ArrayList<AudioPlayer>();
+		westernList = new ArrayList<AudioPlayer>();
 
 		minim = new Minim(this);
 		soundEffect = minim.loadFile("sting.mp3");
@@ -69,6 +69,7 @@ public class MyProcessingSketch extends PApplet {
 				viewEast();
 			if (keyCode == CONTROL)
 				soundEffect.play();
+			
 		}
 	}
 
