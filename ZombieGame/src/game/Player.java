@@ -1,7 +1,7 @@
+package game;
 /**
  * 
  */
-package game;
 
 /**
  * @author patrick
@@ -64,6 +64,18 @@ public class Player {
 	 */
 	public void setViewDirection(int viewDirection) {
 		this.viewDirection = viewDirection;
+		printViewDirection(viewDirection);
+	}
+	
+	public void printViewDirection(int viewDirection) {
+		if(viewDirection == 0)
+			System.out.println("NORTH");
+		else if(viewDirection == 1)
+			System.out.println("EAST");
+		else if(viewDirection == 2)
+			System.out.println("SOUTH");
+		else if(viewDirection == 3)
+			System.out.println("WEST");
 	}
 	
 	

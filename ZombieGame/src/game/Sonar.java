@@ -17,6 +17,7 @@ public class Sonar extends PApplet {
 	public static final int EAST = 1;
 	public static final int SOUTH = 2;
 	public static final int WEST = 3;
+	public static int numberDirections = 4;
 	
 	
 	private Player player;
@@ -95,20 +96,33 @@ public class Sonar extends PApplet {
 
 	public void keyPressed() {
 		if (key == CODED) {
-			if (keyCode == UP)
-				player.viewNorth();
-			if (keyCode == DOWN)
-				player.viewSouth();
+			int currentDirection = player.getViewDirection();
 			if (keyCode == LEFT)
-				player.viewWest();
+				player.setViewDirection(prevDirection(currentDirection));
 			if (keyCode == RIGHT)
-				player.viewEast();
+				player.setViewDirection(nextDirection(currentDirection));
 			if (keyCode == CONTROL){
 				targetLocked();
 			}
-				
 		}
 	}
+	
+	public int nextDirection(int currentDirection) {
+		if(currentDirection == numberDirections-1)
+			return 0;
+		else
+			currentDirection++;
+		return currentDirection;
+	}
+	
+	public int prevDirection(int currentDirection) {
+		if(currentDirection == 0)
+			return numberDirections-1;
+		else
+			currentDirection--;
+		return currentDirection;
+	}
+	
 	
 	/**
 	 * @return true if enemy is in field of view (removes the enemy if so)
