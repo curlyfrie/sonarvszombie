@@ -1,4 +1,6 @@
 package game;
+import java.util.Random;
+
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import processing.core.PApplet;
@@ -46,6 +48,10 @@ public class Enemy {
 		gameover=false;
 		minim = new Minim(p);
 		sound = minim.loadFile("/sounds/zombie.mp3");
+		Random random = new Random();
+		float speed = random.nextFloat();
+		xspeed = speed;
+		yspeed = speed;
 		
 		//setting start values
 		if(pDirection == Sonar.NORTH) {

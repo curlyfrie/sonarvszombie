@@ -27,6 +27,7 @@ public class Sonar extends PApplet {
 	private Player player;
 	private static Boolean play;
 	private int enemyTimer;
+	private int randomTime;
 	private int midX;
 	private int midY;
 	/**
@@ -54,6 +55,8 @@ public class Sonar extends PApplet {
 		enemies = new HashMap<Integer, ArrayList<Enemy>>();
 		enemyTimer = 0;
 		missCounter = 0;
+		Random random = new Random();
+		randomTime = random.nextInt(200) + 100;
 
 		player = new Player(this);
 		// createEnemies();
@@ -100,9 +103,11 @@ public class Sonar extends PApplet {
 			// Random random = new Random();
 			// int direction = random.nextInt(50000);
 	
-			if (enemyTimer == 200) {
+			if (enemyTimer == randomTime) {
 				createEnemies();
 				enemyTimer = 0;
+				Random random = new Random();
+				randomTime = random.nextInt(200) + 100;
 			}
 		} else {
 			background(255);
@@ -154,11 +159,11 @@ public class Sonar extends PApplet {
 				adjustSound(currentDirection, "left");
 				player.setViewDirection(getLeftDirection(currentDirection));
 			}
-			if (keyCode == RIGHT){
+			else if (keyCode == RIGHT){
 				adjustSound(currentDirection, "right");
 				player.setViewDirection(getRightDirection(currentDirection));
 			}
-			if (keyCode == CONTROL){
+			else if (keyCode == CONTROL){
 				targetLocked();
 			}
 		}
