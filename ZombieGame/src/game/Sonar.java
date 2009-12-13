@@ -63,7 +63,6 @@ public class Sonar extends PApplet {
 		welcome = minim.loadFile("/sounds/welcome.mp3");
 		gameover = minim.loadFile("/sounds/gameover.mp3");
 		miss = minim.loadFile("/sounds/miss.mp3");
-		welcome.play();
 	}
 
 	public void draw() {
@@ -112,6 +111,7 @@ public class Sonar extends PApplet {
 			textAlign(CENTER);
 //			welcome.setGain(0);
 //			welcome.setPan(0);
+			welcome.play();
 		}
 	}
 
@@ -143,7 +143,7 @@ public class Sonar extends PApplet {
 	public void keyPressed() {
 		if(key == ' '){
 			if (!play) {
-				welcome.close();
+				//welcome.close();
 //				minim.stop();
 				play=true;
 			}
@@ -355,13 +355,13 @@ public class Sonar extends PApplet {
 		
 	}
 	
-	public void stopSound(){
+	/*public void stopSound(){
 		// always close Minim audio classes when you are done with them
 //		sound.close();
 		// always stop Minim before exiting
 		minim.stop();
 		 
 		super.stop();
-	}
+	}*/
 
 }
