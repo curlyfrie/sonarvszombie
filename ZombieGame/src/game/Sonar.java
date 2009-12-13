@@ -63,6 +63,7 @@ public class Sonar extends PApplet {
 		welcome = minim.loadFile("/sounds/welcome.mp3");
 		gameover = minim.loadFile("/sounds/gameover.mp3");
 		miss = minim.loadFile("/sounds/miss.mp3");
+		welcome.play();
 	}
 
 	public void draw() {
@@ -107,10 +108,10 @@ public class Sonar extends PApplet {
 		} else {
 			background(255);
 			fill(255,0,0);
-			text("Welcome to Zombie Game! Press ALT to begin",100,100);
+			text("Welcome to Zombie Game! Press ALT to begin",midX,midY);
+			textAlign(CENTER);
 //			welcome.setGain(0);
 //			welcome.setPan(0);
-			welcome.play();
 		}
 	}
 
