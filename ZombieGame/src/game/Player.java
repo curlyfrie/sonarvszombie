@@ -64,7 +64,7 @@ public class Player {
 	 */
 	public void setViewDirection(int viewDirection) {
 		this.viewDirection = viewDirection;
-		printViewDirection(viewDirection);
+		//printViewDirection(viewDirection);
 	}
 	
 	public void printViewDirection(int viewDirection) {

@@ -12,10 +12,17 @@ public class Enemy {
 	
 	//"noise" control
 	float gain;
-	static final float gainN = 0f;
-	static final float gainE = 0.25f;
-	static final float gainS = 0.5f;
-	static final float gainW = 0.75f;
+	float pan;
+	
+	static float gainN = 1;
+	static float gainE = -10;
+	static float gainS = -10;
+	static float gainW = -10;
+	
+	static float panN = 0;
+	static float panE = 1;
+	static float panS = 0;
+	static float panW = -1;
 	
 	// The parent PApplet that we will render ourselves onto
 	PApplet parent; 
@@ -43,24 +50,28 @@ public class Enemy {
 			ypos = 0;
 			direction = Sonar.NORTH;
 			gain = gainN;
+			pan = panN;
 		}
 		if(pDirection == Sonar.EAST) {
 			xpos = p.getWidth();
 			ypos = p.getHeight()/2;
 			direction = Sonar.EAST;
 			gain = gainE;
+			pan = panE;
 		}
 		if(pDirection == Sonar.SOUTH) {
 			xpos = p.getWidth()/2;
 			ypos = p.getHeight();
 			direction = Sonar.SOUTH;
 			gain = gainS;
+			pan = panS;
 		}
 		if(pDirection == Sonar.WEST) {
 			xpos = 0;
 			ypos = p.getHeight()/2;
 			direction = Sonar.WEST;
 			gain = gainW;
+			pan = panW;
 		}
 		
 		//setting up playback of sound (depending on direction)
@@ -71,7 +82,8 @@ public class Enemy {
 //		System.out.println("sound gain = " + sound.getGain());
 		
 		
-		sound.setGain(-1*gain);
+		sound.setGain(gain);
+		sound.setPan(pan);
 		sound.loop();
 		
 	}
@@ -104,7 +116,24 @@ public class Enemy {
 	void modifySound(){
 		
 	}
-
+	
+	void setGain(float v){
+		sound.setGain(v);
+	}
+	
+	void setPan(float v){
+		sound.setPan(v);
+	}
+	
+	void stopSound(){
+		// always close Minim audio classes when you are done with them
+		sound.close();
+		// always stop Minim before exiting
+		minim.stop();
+		 
+		//super.stop();
+	}
+	
 	/**
 	 * @return the direction
 	 */

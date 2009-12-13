@@ -19,7 +19,6 @@ public class Sonar extends PApplet {
 	public static final int WEST = 3;
 	public static int numberDirections = 4;
 	
-	
 	private Player player;
 	private int enemyTimer;
 	private int midX;
@@ -45,7 +44,10 @@ public class Sonar extends PApplet {
 
 	public void draw() {
 		background(255);
-		stroke(0);
+		
+		//visual pointer in the middle
+		fill(0);
+		ellipse(midX, midY, 4, 4);
 		if(player.getViewDirection() == NORTH)
 			line(midX, midY, midX, midY-10);
 		else if(player.getViewDirection() == SOUTH)
@@ -54,9 +56,6 @@ public class Sonar extends PApplet {
 			line(midX, midY, midX-10, midY);
 		else if(player.getViewDirection() == EAST)
 			line(midX, midY, midX+10, midY);
-		
-		//fill(255);
-		// ellipse(width / 2, height / 2, width, height);
 
 		if (!enemies.isEmpty()) {
 			Collection<ArrayList<Enemy>> temp = enemies.values();
@@ -80,7 +79,6 @@ public class Sonar extends PApplet {
 			createEnemies();
 			enemyTimer = 0;
 		}
-
 	}
 
 	/**
@@ -111,28 +109,137 @@ public class Sonar extends PApplet {
 	public void keyPressed() {
 		if (key == CODED) {
 			int currentDirection = player.getViewDirection();
-			if (keyCode == LEFT)
-				player.setViewDirection(prevDirection(currentDirection));
-			if (keyCode == RIGHT)
-				player.setViewDirection(nextDirection(currentDirection));
+			if (keyCode == LEFT){
+				adjustSound(currentDirection, "left");
+				player.setViewDirection(getLeftDirection(currentDirection));
+			}
+			if (keyCode == RIGHT){
+				adjustSound(currentDirection, "right");
+				player.setViewDirection(getRightDirection(currentDirection));
+			}
 			if (keyCode == CONTROL){
 				targetLocked();
 			}
 		}
 	}
 	
-	public int nextDirection(int currentDirection) {
-		if(currentDirection != numberDirections-1)
-			return ++currentDirection;
+	/**
+	 * @param direction
+	 * @return Returns the directions right to the input-direction.
+	 */
+	public int getRightDirection(int direction) {
+		if(direction != numberDirections-1)
+			return ++direction;
 		return 0;
 	}
 	
-	public int prevDirection(int currentDirection) {
-		if(currentDirection != 0)
-			return --currentDirection;
+	/**
+	 * @param direction
+	 * @return Returns the direction left to the input-direction.
+	 */
+	public int getLeftDirection(int direction) {
+		if(direction != 0)
+			return --direction;
 		return numberDirections-1;
 	}
 	
+	/**
+	 * @param direction
+	 * @param moveTo Direction to which the pointer will move.
+	 * 
+	 * Adjusts gain and pan according to current-direction and moving-direction.
+	 * The gain of the new direction will be set to 1, all other directions (last-direction) should have a gain of -10.
+	 * The pan of new direction will be set to 0, the direction left to it to -1, right to it to 1 and the direction behind it to 0.
+	 */
+	public void adjustSound(int direction, String moveTo){
+		if(moveTo.equals("left")){
+			setGain(direction, -10);
+			setGain(getLeftDirection(direction), 1);
+			
+			setPan(direction, 1);
+			setPan(getLeftDirection(direction), 0);
+			setPan(getLeftDirection(getLeftDirection(direction)), -1);
+			setPan(getRightDirection(direction), 0);
+		}
+		else if(moveTo.equals("right")){
+			setGain(direction, -10);
+			setGain(getRightDirection(direction), 1);
+			
+			setPan(direction, -1);
+			setPan(getRightDirection(direction), 0);
+			setPan(getRightDirection(getRightDirection(direction)), 1);
+			setPan(getLeftDirection(direction), 0);
+		}
+	}
+	
+	/**
+	 * @param direction
+	 * @param gain
+	 * 
+	 * Sets the gain of all enemies existing on the direction and the startingGain of the direction itself.
+	 */
+	public void setGain(int direction, float gain){
+		if(enemies.get(direction) != null){
+			ArrayList<Enemy> directionEnemies = enemies.get(direction);
+			for(int i=0; i < directionEnemies.size(); i++){
+				directionEnemies.get(i).setGain(gain);
+			}
+		}
+		//set starting gain-value of direction (for future enemies)
+		setStartingGain(direction, gain);
+	}
+	
+	/**
+	 * @param direction
+	 * @param gain
+	 * 
+	 * Sets the startingGain of the input direction.
+	 */
+	public void setStartingGain(int direction, float gain){
+		if(direction == 0)
+			Enemy.gainN = gain;
+		else if(direction == 1)
+			Enemy.gainE = gain;
+		else if(direction == 2)
+			Enemy.gainS = gain;
+		else if(direction == 3)
+			Enemy.gainW = gain;
+	}
+	
+	
+	/**
+	 * @param direction
+	 * @param pan
+	 * 
+	 * Analogous to the setGain-method: sets the pan of all enemies existing on the direction and the startingPan of the direction itself.
+	 */
+	public void setPan(int direction, float pan){
+		if(enemies.get(direction) != null){
+			ArrayList<Enemy> directionEnemies = enemies.get(direction);
+			for(int i=0; i < directionEnemies.size(); i++){
+				directionEnemies.get(i).setPan(pan);
+			}
+		}
+		//set starting pan-value of direction (for future enemies)
+		setStartingPan(direction, pan);
+	}
+	
+	/**
+	 * @param direction
+	 * @param pan
+	 * 
+	 * Sets the startingPan of the input direction.
+	 */
+	public void setStartingPan(int direction, float pan){
+		if(direction == 0)
+			Enemy.panN = pan;
+		else if(direction == 1)
+			Enemy.panE = pan;
+		else if(direction == 2)
+			Enemy.panS = pan;
+		else if(direction == 3)
+			Enemy.panW = pan;
+	}
 	
 	/**
 	 * @return true if enemy is in field of view (removes the enemy if so)
@@ -140,17 +247,30 @@ public class Sonar extends PApplet {
 	public boolean targetLocked(){
 		boolean targetvisible = false;
 		
-		if (!enemies.isEmpty()) {
-			Collection<ArrayList<Enemy>> temp = enemies.values();
-
-			for (int i = 0; i < temp.size(); i++) {
+		if (!enemies.isEmpty() && enemies.get(player.getViewDirection()) != null) {
+			/*Collection<ArrayList<Enemy>> temp = enemies.values();
+			
+			for (int i = 2; i < temp.size(); i++) {
 				for (ArrayList<Enemy> seekList : temp) {
 					for (int j = 0; j < seekList.size(); j++) {
-						if(seekList.get(j).getDirection() == player.getViewDirection())
+						if(seekList.get(j).getDirection() == player.getViewDirection()){
 							seekList.remove(seekList.get(j));
+						}
 					}
 				}
+			}*/
+			
+			//Shoot all enemies of direction.
+			ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
+			for(int i=currentDirectionEnemies.size()-1; i >= 0; i--){
+				currentDirectionEnemies.get(i).stopSound();
+				currentDirectionEnemies.remove(i);
 			}
+			
+			//Shoot just one enemy.
+			/*ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
+			currentDirectionEnemies.get(0).stopSound();
+			currentDirectionEnemies.remove(0);*/
 		}
 		
 		return targetvisible;
