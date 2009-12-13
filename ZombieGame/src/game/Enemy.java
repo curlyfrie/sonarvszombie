@@ -10,6 +10,8 @@ public class Enemy {
 	float xspeed=0.1f; 
 	float yspeed=0.1f;
 	
+	float radius = 20f;
+	
 	//"noise" control
 	float gain;
 	float pan;
@@ -27,6 +29,7 @@ public class Enemy {
 	// The parent PApplet that we will render ourselves onto
 	PApplet parent; 
 	
+	Boolean gameover;
 	
 	int direction;
 	
@@ -40,7 +43,7 @@ public class Enemy {
 	 * */
 	public Enemy(PApplet p, int pDirection) {
 		parent = p;
-		
+		gameover=false;
 		minim = new Minim(p);
 		sound = minim.loadFile("/game/sting.mp3");
 		
@@ -90,22 +93,38 @@ public class Enemy {
 
 	void display() {	    
 		parent.fill(255,0,0); 
-		parent.ellipse(xpos,ypos,20,20);
+		parent.ellipse(xpos,ypos,radius,radius);
 	} 
 	void move() {
 //		xpos =	xpos+xspeed;
 //		ypos = 	ypos+yspeed;
 		
 		if(direction == Sonar.NORTH) {
+			if (ypos>=parent.height/2-radius/2) {
+				gameover=true;
+				return;
+			}
 			ypos += yspeed;
 		}
 		if(direction == Sonar.EAST) {
+			if (xpos<=parent.width/2+radius/2) {
+				gameover = true;
+				return;
+			}
 			xpos -= xspeed;
 		}
 		if(direction == Sonar.SOUTH) {
+			if (ypos<=parent.height/2+radius/2) {
+				gameover=true;
+				return;
+			}
 			ypos -= yspeed;
 		}
 		if(direction == Sonar.WEST) {
+			if (xpos>=parent.width/2-radius/2) {
+				gameover=true;
+				return;
+			}
 			xpos += xspeed;
 		}
 		
@@ -131,7 +150,7 @@ public class Enemy {
 		// always stop Minim before exiting
 		minim.stop();
 		 
-		//super.stop();
+//		super.stop();
 	}
 	
 	/**
