@@ -292,8 +292,8 @@ public class Sonar extends PApplet {
 			/*ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
 			for(int i=currentDirectionEnemies.size()-1; i >= 0; i--){
 				currentDirectionEnemies.get(i).stopSound();
-				currentDirectionEnemies.remove(i);*/
-			}
+				currentDirectionEnemies.remove(i);
+			}*/
 			
 			//Shoot just one enemy.
 			ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
