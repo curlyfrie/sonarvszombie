@@ -40,6 +40,7 @@ public class Sonar extends PApplet {
 	private AudioPlayer gameover;
 	private AudioPlayer miss;
 	private int welcomeTimer;
+	private int missCounter;
 
 	/**
 	 * init method: sets up everything
@@ -52,6 +53,7 @@ public class Sonar extends PApplet {
 
 		enemies = new HashMap<Integer, ArrayList<Enemy>>();
 		enemyTimer = 0;
+		missCounter = 0;
 
 		player = new Player(this);
 		// createEnemies();
@@ -302,7 +304,9 @@ public class Sonar extends PApplet {
 	public boolean targetLocked(){
 		boolean targetvisible = false;
 		
-		if (!enemies.isEmpty() && enemies.get(player.getViewDirection()) != null) {
+		
+		if (!enemies.isEmpty() && enemies.get(player.getViewDirection()) != null && enemies.get(player.getViewDirection()).size()>0) {
+			System.out.println(enemies.get(player.getViewDirection()).size());
 			/*Collection<ArrayList<Enemy>> temp = enemies.values();
 			
 			for (int i = 2; i < temp.size(); i++) {
@@ -327,7 +331,15 @@ public class Sonar extends PApplet {
 			currentDirectionEnemies.get(0).stopSound();
 			currentDirectionEnemies.remove(0);
 		} else {
+			System.out.println("miss");
+			miss.rewind();
 			miss.play();
+			missCounter++;
+			if (missCounter==3) {
+				delay(1000);
+				gameOver();
+				return false;
+			}
 		}
 		
 		return targetvisible;
