@@ -108,7 +108,7 @@ public class Sonar extends PApplet {
 		} else {
 			background(255);
 			fill(255,0,0);
-			text("Welcome to Zombie Game! Press ALT to begin",midX,midY);
+			text("Welcome to Zombie Game! Press SPACE to begin",midX,midY);
 			textAlign(CENTER);
 //			welcome.setGain(0);
 //			welcome.setPan(0);
@@ -141,6 +141,13 @@ public class Sonar extends PApplet {
 	}
 
 	public void keyPressed() {
+		if(key == ' '){
+			if (!play) {
+				welcome.close();
+//				minim.stop();
+				play=true;
+			}
+		}
 		if (key == CODED) {
 			int currentDirection = player.getViewDirection();
 			if (keyCode == LEFT){
@@ -153,13 +160,6 @@ public class Sonar extends PApplet {
 			}
 			if (keyCode == CONTROL){
 				targetLocked();
-			}
-			if (keyCode == ALT){
-				if (!play) {
-					welcome.close();
-//					minim.stop();
-					play=true;
-				}
 			}
 		}
 	}
