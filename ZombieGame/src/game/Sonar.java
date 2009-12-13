@@ -324,18 +324,35 @@ public class Sonar extends PApplet {
 					}
 				}
 			}*/
-			
-			//Shoot all enemies of direction.
-			/*ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
-			for(int i=currentDirectionEnemies.size()-1; i >= 0; i--){
-				currentDirectionEnemies.get(i).stopSound();
-				currentDirectionEnemies.remove(i);
-			}*/
-			
-			//Shoot just one enemy.
+					
+			/*
+			 * Shoot just one enemy -> enemy closest to the center.
+			 * diffX = abs( centerX - enemyX )
+			 * diffY = abs( centerY - enemyY )
+			 * sumXY = diffX + diffY
+			 * 
+			 * The enemy with the smallest sumXY is the nearest to the center and should get shot.
+			 * 
+			 */
 			ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
-			currentDirectionEnemies.get(0).stopSound();
-			currentDirectionEnemies.remove(0);
+			float diffX = 0;
+			float diffY = 0;
+			float sumXY = 0;
+			int closestEnemyPos = 0;
+			diffX = abs(midX - currentDirectionEnemies.get(closestEnemyPos).xpos);
+			diffY = abs(midY - currentDirectionEnemies.get(closestEnemyPos).ypos);
+			sumXY = diffX + diffY;
+			
+			for(int i=0; i < currentDirectionEnemies.size(); i++){
+				diffX = abs(midX - currentDirectionEnemies.get(i).xpos);
+				diffY = abs(midY - currentDirectionEnemies.get(i).ypos);
+				if(diffX+diffY <= sumXY){
+					sumXY = diffX + diffY;
+					closestEnemyPos = i;
+				}
+			}
+			currentDirectionEnemies.get(closestEnemyPos).stopSound();
+			currentDirectionEnemies.remove(closestEnemyPos);
 		} else {
 			System.out.println("miss");
 			miss.rewind();
