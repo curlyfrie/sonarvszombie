@@ -68,16 +68,14 @@ public class Sonar extends PApplet {
 			if (!enemies.isEmpty()) {
 				Collection<ArrayList<Enemy>> temp = enemies.values();
 	
-				for (int i = 0; i < temp.size(); i++) {
-					for (ArrayList<Enemy> listToDraw : temp) {
-						for (int j = 0; j < listToDraw.size(); j++) {
-							listToDraw.get(j).move();
-							if(listToDraw.get(j).gameover) {
-								gameOver();
-								return;
-							}
-							listToDraw.get(j).display();
+				for (ArrayList<Enemy> listToDraw : temp) {
+					for (int j = 0; j < listToDraw.size(); j++) {
+						listToDraw.get(j).move();
+						if(listToDraw.get(j).gameover) {
+							gameOver();
+							return;
 						}
+						listToDraw.get(j).display();
 					}
 				}
 			}
