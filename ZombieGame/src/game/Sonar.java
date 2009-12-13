@@ -8,6 +8,9 @@ import java.util.Random;
 
 import com.sun.org.apache.xpath.internal.axes.SelfIteratorNoPredicate;
 
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
+
 import processing.core.*;
 
 /**
@@ -31,13 +34,19 @@ public class Sonar extends PApplet {
 	 * */
 	private HashMap<Integer, ArrayList<Enemy>> enemies;
 	private PFont myFont;
+	
+	private Minim minim;
+	private AudioPlayer welcome;
+	private AudioPlayer gameover;
+	private AudioPlayer miss;
+	private int welcomeTimer;
 
 	/**
 	 * init method: sets up everything
 	 * */
 	public void setup() {
 		size(400, 400);
-		play = true;
+		play = false;
 		myFont = createFont("verdana", 12);
 		textFont(myFont);
 
@@ -48,6 +57,10 @@ public class Sonar extends PApplet {
 		// createEnemies();
 		midX = width/2;
 		midY = height/2;
+		minim = new Minim(this);
+		welcome = minim.loadFile("/sounds/welcome.mp3");
+		gameover = minim.loadFile("/sounds/gameover.mp3");
+		miss = minim.loadFile("/sounds/miss.mp3");
 	}
 
 	public void draw() {
@@ -89,6 +102,13 @@ public class Sonar extends PApplet {
 				createEnemies();
 				enemyTimer = 0;
 			}
+		} else {
+			background(255);
+			fill(255,0,0);
+			text("Welcome to Zombie Game! Press ALT to begin",100,100);
+//			welcome.setGain(0);
+//			welcome.setPan(0);
+			welcome.play();
 		}
 	}
 
@@ -130,6 +150,13 @@ public class Sonar extends PApplet {
 			}
 			if (keyCode == CONTROL){
 				targetLocked();
+			}
+			if (keyCode == ALT){
+				if (!play) {
+					welcome.close();
+//					minim.stop();
+					play=true;
+				}
 			}
 		}
 	}
@@ -299,6 +326,8 @@ public class Sonar extends PApplet {
 			ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
 			currentDirectionEnemies.get(0).stopSound();
 			currentDirectionEnemies.remove(0);
+		} else {
+			miss.play();
 		}
 		
 		return targetvisible;
@@ -308,6 +337,18 @@ public class Sonar extends PApplet {
 		play = false;
 		removeAllEnemies();
 		text("oh no! it's over! :((((((((((((",100,100);
+		gameover.play();
+		
+		
+	}
+	
+	public void stopSound(){
+		// always close Minim audio classes when you are done with them
+//		sound.close();
+		// always stop Minim before exiting
+		minim.stop();
+		 
+		super.stop();
 	}
 
 }

@@ -45,7 +45,7 @@ public class Enemy {
 		parent = p;
 		gameover=false;
 		minim = new Minim(p);
-		sound = minim.loadFile("/game/zombie.mp3");
+		sound = minim.loadFile("/sounds/zombie.mp3");
 		
 		//setting start values
 		if(pDirection == Sonar.NORTH) {
