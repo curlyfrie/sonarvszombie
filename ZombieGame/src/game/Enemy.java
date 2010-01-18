@@ -6,6 +6,11 @@ import ddf.minim.Minim;
 import processing.core.PApplet;
 
 public class Enemy {
+	
+	static final String ZOMBIE="zombie";
+	static final String SUBMARINE="submarine";
+	static final String DEVIL="devil";
+	
 
 	float xpos;
 	float ypos;
@@ -96,6 +101,66 @@ public class Enemy {
 		sound.loop();
 		
 	}
+	
+	public Enemy(PApplet p, int pDirection, String type) {
+		parent = p;
+		gameover=false;
+		minim = new Minim(p);
+		if (type == ZOMBIE)
+			sound = minim.loadFile("/sounds/zombie.mp3");
+		if (type == SUBMARINE)
+			sound = minim.loadFile("/sounds/sonar.mp3");
+		if (type == DEVIL)
+			sound = minim.loadFile("/sounds/devil.mp3");
+		Random random = new Random();
+		float speed = random.nextFloat();
+		xspeed = speed;
+		yspeed = speed;
+		
+		//setting start values
+		if(pDirection == Sonar.NORTH) {
+			xpos = p.getWidth()/2;
+			ypos = 0;
+			direction = Sonar.NORTH;
+			gain = gainN;
+			pan = panN;
+		}
+		if(pDirection == Sonar.EAST) {
+			xpos = p.getWidth();
+			ypos = p.getHeight()/2;
+			direction = Sonar.EAST;
+			gain = gainE;
+			pan = panE;
+		}
+		if(pDirection == Sonar.SOUTH) {
+			xpos = p.getWidth()/2;
+			ypos = p.getHeight();
+			direction = Sonar.SOUTH;
+			gain = gainS;
+			pan = panS;
+		}
+		if(pDirection == Sonar.WEST) {
+			xpos = 0;
+			ypos = p.getHeight()/2;
+			direction = Sonar.WEST;
+			gain = gainW;
+			pan = panW;
+		}
+		
+		//setting up playback of sound (depending on direction)
+//		sound.setVolume(volume);
+//		System.out.println("sound volume = " + sound.getVolume());
+//		System.out.println("sound volume = " + sound.volume());
+//		System.out.println("sound gain = " + sound.gain());
+//		System.out.println("sound gain = " + sound.getGain());
+		
+		
+		sound.setGain(gain);
+		sound.setPan(pan);
+		sound.loop();
+		
+	}
+	
 
 	void display() {	    
 		parent.fill(255,0,0); 

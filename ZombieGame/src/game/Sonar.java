@@ -34,6 +34,8 @@ public class Sonar extends PApplet {
 	public static final String LEVEL3 = "level3";
 	public static final String LEVEL3_INTRO = "level3intro";
 	
+	private int maxEnemyCount = 10;
+	
 	private String level;
 	private Player player;
 	private static Boolean play;
@@ -58,6 +60,10 @@ public class Sonar extends PApplet {
 	private AudioPlayer miss;
 	private int welcomeTimer;
 	private int missCounter;
+	private int enemyCount;
+	private boolean lastEnemy;
+	private String enemyType;
+
 
 	/**
 	 * init method: sets up everything
@@ -67,7 +73,9 @@ public class Sonar extends PApplet {
 		play = false;
 		myFont = createFont("verdana", 12);
 		textFont(myFont);
-
+		
+		enemyCount=0;
+		
 		enemies = new HashMap<Integer, ArrayList<Enemy>>();
 		enemyTimer = 0;
 		missCounter = 0;
@@ -179,7 +187,9 @@ public class Sonar extends PApplet {
 	 * fille the enemies list
 	 * */
 	public void createEnemies() {
-
+		
+		enemyCount ++;
+		
 		// determine a random direction
 		Random random = new Random();
 		Integer direction = random.nextInt(4);
@@ -191,11 +201,17 @@ public class Sonar extends PApplet {
 		// case: no enemies in this direction
 		if (enemies.get(direction) == null) {
 			directionList = new ArrayList<Enemy>();
-			directionList.add(new Enemy(this, direction));
+			
+			directionList.add(new Enemy(this, direction,enemyType));
 
 			enemies.put(direction, directionList);
 		} else {
-			enemies.get(direction).add(new Enemy(this, direction));
+			enemies.get(direction).add(new Enemy(this, direction,enemyType));
+		}
+		
+		if(enemyCount==maxEnemyCount) {
+			lastEnemy = true;
+			System.out.println("lastenemy");
 		}
 
 	}
@@ -215,14 +231,17 @@ public class Sonar extends PApplet {
 			}
 			else if (level==LEVEL1_INTRO) {
 				if (kapitel1player.isPlaying()) kapitel1player.close();
+				enemyType = Enemy.ZOMBIE;
 				level = LEVEL1;
 			}
 			else if (level==LEVEL2_INTRO) {
 				if (kapitel2player.isPlaying()) kapitel2player.close();
+				enemyType = Enemy.SUBMARINE;
 				level = LEVEL2;
 			}
 			else if (level==LEVEL3_INTRO) {
 				if (kapitel3player.isPlaying()) kapitel3player.close();
+				enemyType = Enemy.DEVIL;
 				level=LEVEL3;
 			}
 			else if (level==OUTRO) {
@@ -435,6 +454,21 @@ public class Sonar extends PApplet {
 			}
 			currentDirectionEnemies.get(closestEnemyPos).stopSound();
 			currentDirectionEnemies.remove(closestEnemyPos);
+			
+			// check if player has done level
+			if (lastEnemy) {
+				play=false;
+				lastEnemy = false;
+				enemyCount = 0;
+				removeAllEnemies();
+				if (level == LEVEL1)
+					level = LEVEL2_INTRO;
+				if (level == LEVEL2)
+					level = LEVEL3_INTRO;
+				if (level == LEVEL3)
+					level = OUTRO;
+			}
+			
 		} else {
 			System.out.println("miss");
 			miss.rewind();
