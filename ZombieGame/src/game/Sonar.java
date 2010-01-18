@@ -24,6 +24,16 @@ public class Sonar extends PApplet {
 	public static final int WEST = 3;
 	public static int numberDirections = 4;
 	
+	public static final String INTRO = "intro";
+	public static final String START = "start";
+	public static final String LEVEL1 = "level1";
+	public static final String LEVEL1_INTRO = "level1intro";
+	public static final String LEVEL2 = "level2";
+	public static final String LEVEL2_INTRO = "level2intro";
+	public static final String LEVEL3 = "level3";
+	public static final String LEVEL3_INTRO = "level3intro";
+	
+	private String level;
 	private Player player;
 	private static Boolean play;
 	private int enemyTimer;
@@ -38,6 +48,10 @@ public class Sonar extends PApplet {
 	
 	private Minim minim;
 	private AudioPlayer welcome;
+	private AudioPlayer introplayer;
+	private AudioPlayer kapitel1player;
+	private AudioPlayer kapitel2player;
+	private AudioPlayer kapitel3player;
 	private AudioPlayer gameover;
 	private AudioPlayer miss;
 	private int welcomeTimer;
@@ -66,6 +80,13 @@ public class Sonar extends PApplet {
 		welcome = minim.loadFile("/sounds/welcome.mp3");
 		gameover = minim.loadFile("/sounds/gameover.mp3");
 		miss = minim.loadFile("/sounds/miss.mp3");
+		introplayer = minim.loadFile("/sounds/intro.mp3");
+		kapitel1player = minim.loadFile("/sounds/kapitel1.mp3");
+		kapitel2player = minim.loadFile("/sounds/kapitel2.mp3");
+		kapitel3player = minim.loadFile("/sounds/kapitel3.mp3");
+		
+		level = INTRO;
+		
 	}
 
 	public void draw() {
@@ -109,7 +130,32 @@ public class Sonar extends PApplet {
 				Random random = new Random();
 				randomTime = random.nextInt(200) + 100;
 			}
-		} else {
+		} else if (level==INTRO) {
+				background(255);
+				fill(255,0,0);
+				text("†berspringen mit SPACE",midX,midY);
+				textAlign(CENTER);
+				introplayer.play();
+		} else if (level==LEVEL1_INTRO) {
+			background(255);
+			fill(255,0,0);
+			text("†berspringen mit SPACE",midX,midY);
+			textAlign(CENTER);
+			kapitel1player.play();
+		} else if (level==LEVEL2_INTRO) {
+			background(255);
+			fill(255,0,0);
+			text("†berspringen mit SPACE",midX,midY);
+			textAlign(CENTER);
+			kapitel2player.play();
+		} else if (level==LEVEL3_INTRO) {
+			background(255);
+			fill(255,0,0);
+			text("†berspringen mit SPACE",midX,midY);
+			textAlign(CENTER);
+			kapitel3player.play();
+			
+		} else if (level==START){
 			background(255);
 			fill(255,0,0);
 			text("Welcome to Zombie Game! Press SPACE to begin",midX,midY);
@@ -147,6 +193,28 @@ public class Sonar extends PApplet {
 
 	public void keyPressed() {
 		if(key == ' '){
+			if (level==INTRO) {
+				if (introplayer.isPlaying()) introplayer.close();
+				level=START;
+				return;
+			}
+			if (level==START) {
+				if (welcome.isPlaying()) welcome.close();
+				level=LEVEL1_INTRO;
+				return;
+			}
+			else if (level==LEVEL1_INTRO) {
+				if (kapitel1player.isPlaying()) kapitel1player.close();
+				level = LEVEL1;
+			}
+			else if (level==LEVEL2_INTRO) {
+				if (kapitel2player.isPlaying()) kapitel2player.close();
+				level = LEVEL2;
+			}
+			else if (level==LEVEL3_INTRO) {
+				if (kapitel3player.isPlaying()) kapitel3player.close();
+				level=LEVEL3;
+			}
 			if (!play) {
 				//welcome.close();
 //				minim.stop();
