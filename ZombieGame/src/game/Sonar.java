@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import com.sun.org.apache.xpath.internal.axes.SelfIteratorNoPredicate;
+//import com.sun.org.apache.xpath.internal.axes.SelfIteratorNoPredicate;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
@@ -58,6 +58,7 @@ public class Sonar extends PApplet {
 	private AudioPlayer kapitel3player;
 	private AudioPlayer gameover;
 	private AudioPlayer miss;
+	private AudioPlayer shoot;
 	private int welcomeTimer;
 	private int missCounter;
 	private int enemyCount;
@@ -90,6 +91,7 @@ public class Sonar extends PApplet {
 		welcome = minim.loadFile("/sounds/welcome.mp3");
 		gameover = minim.loadFile("/sounds/gameover.mp3");
 		miss = minim.loadFile("/sounds/miss.mp3");
+		shoot = minim.loadFile("/sounds/gunshot.mp3");
 		introplayer = minim.loadFile("/sounds/intro.mp3");
 		outroplayer = minim.loadFile("/sounds/outro.mp3");
 		kapitel1player = minim.loadFile("/sounds/kapitel1.mp3");
@@ -410,7 +412,8 @@ public class Sonar extends PApplet {
 	 * */
 	public boolean targetLocked(){
 		boolean targetvisible = false;
-		
+		shoot.rewind();
+		shoot.play();
 		
 		if (!enemies.isEmpty() && enemies.get(player.getViewDirection()) != null && enemies.get(player.getViewDirection()).size()>0) {
 			System.out.println(enemies.get(player.getViewDirection()).size());
