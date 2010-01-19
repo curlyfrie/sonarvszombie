@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -115,7 +116,7 @@ public class Sonar extends PApplet {
 	}
 
 	public void draw() {
-		System.out.println("enemies vallues "+enemies.values().size());
+		System.out.println("enemies vallues "+getAllEnemiesSize());
 
 		if (play) {
 			background(255);
@@ -154,11 +155,11 @@ public class Sonar extends PApplet {
 			if (enemyTimer == randomTime) {
 				if (enemyCount<maxEnemyCount) {
 					System.out.println("level: "+level);
-					if(level.equals("level1") && !moreThanXEnemies(0))
+					if(level.equals("level1") && getAllEnemiesSize()==(0))
 						createEnemies();
-					else if(level.equals("level2") && !moreThanXEnemies(1))
+					else if(level.equals("level2") && getAllEnemiesSize()==(1))
 						createEnemies();
-					else if(level.equals("level3") && !moreThanXEnemies(1))
+					else if(level.equals("level3") && getAllEnemiesSize()==(1))
 						createEnemies();
 					enemyTimer = 0;
 					Random random = new Random();
@@ -579,6 +580,17 @@ public class Sonar extends PApplet {
 		ammo = max_ammo;
 		
 	}
+	
+	public int getAllEnemiesSize() {
+		Iterator<ArrayList<Enemy>> it = enemies.values().iterator();
+		int i = 0;
+		while(it.hasNext()) {
+			i += ((ArrayList<Enemy>)it.next()).size();
+			
+		}
+		return i;
+	}
+	
 	
 	/*public void stopSound(){
 		// always close Minim audio classes when you are done with them
