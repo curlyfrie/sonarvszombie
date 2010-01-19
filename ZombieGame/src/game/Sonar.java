@@ -59,9 +59,13 @@ public class Sonar extends PApplet {
 	private AudioPlayer gameover;
 	private AudioPlayer miss;
 	private AudioPlayer shoot;
+	private AudioPlayer no_ammo;
+	private AudioPlayer reload;
 	private int welcomeTimer;
 	private int missCounter;
 	private int enemyCount;
+	private int max_ammo = 3;
+	private int ammo = max_ammo;
 	private boolean lastEnemy;
 	private String enemyType;
 
@@ -91,7 +95,9 @@ public class Sonar extends PApplet {
 		welcome = minim.loadFile("/sounds/welcome.mp3");
 		gameover = minim.loadFile("/sounds/gameover.mp3");
 		miss = minim.loadFile("/sounds/miss.mp3");
-		shoot = minim.loadFile("/sounds/gunshot.mp3");
+		shoot = minim.loadFile("/sounds/gunshot1.mp3");
+		no_ammo = minim.loadFile("/sounds/emptychamber.wav");
+		reload = minim.loadFile("/sounds/reload1.mp3");
 		introplayer = minim.loadFile("/sounds/intro.mp3");
 		outroplayer = minim.loadFile("/sounds/outro.mp3");
 		kapitel1player = minim.loadFile("/sounds/kapitel1.mp3");
@@ -267,7 +273,12 @@ public class Sonar extends PApplet {
 				player.setViewDirection(getRightDirection(currentDirection));
 			}
 			else if (keyCode == CONTROL){
-				targetLocked();
+				if(!shoot.isPlaying() && !reload.isPlaying()){
+					targetLocked();
+				}
+			}
+			else if (keyCode == SHIFT){
+				reload();
 			}
 		}
 	}
@@ -412,79 +423,94 @@ public class Sonar extends PApplet {
 	 * */
 	public boolean targetLocked(){
 		boolean targetvisible = false;
-		shoot.rewind();
-		shoot.play();
+		if(ammo != 0){
+			ammo--;
+			shoot.rewind();
+			shoot.play();
 		
-		if (!enemies.isEmpty() && enemies.get(player.getViewDirection()) != null && enemies.get(player.getViewDirection()).size()>0) {
-			System.out.println(enemies.get(player.getViewDirection()).size());
-			/*Collection<ArrayList<Enemy>> temp = enemies.values();
-			
-			for (int i = 2; i < temp.size(); i++) {
-				for (ArrayList<Enemy> seekList : temp) {
-					for (int j = 0; j < seekList.size(); j++) {
-						if(seekList.get(j).getDirection() == player.getViewDirection()){
-							seekList.remove(seekList.get(j));
+		
+		
+			if (!enemies.isEmpty() && enemies.get(player.getViewDirection()) != null && enemies.get(player.getViewDirection()).size()>0) {
+				System.out.println(enemies.get(player.getViewDirection()).size());
+				/*Collection<ArrayList<Enemy>> temp = enemies.values();
+				
+				for (int i = 2; i < temp.size(); i++) {
+					for (ArrayList<Enemy> seekList : temp) {
+						for (int j = 0; j < seekList.size(); j++) {
+							if(seekList.get(j).getDirection() == player.getViewDirection()){
+								seekList.remove(seekList.get(j));
+							}
 						}
 					}
+				}*/
+						
+				/*
+				 * Shoot just one enemy -> enemy closest to the center.
+				 * diffX = abs( centerX - enemyX )
+				 * diffY = abs( centerY - enemyY )
+				 * sumXY = diffX + diffY
+				 * 
+				 * The enemy with the smallest sumXY is the nearest to the center and should get shot.
+				 * 
+				 */
+				ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
+				float diffX = 0;
+				float diffY = 0;
+				float sumXY = 0;
+				int closestEnemyPos = 0;
+				diffX = abs(midX - currentDirectionEnemies.get(closestEnemyPos).xpos);
+				diffY = abs(midY - currentDirectionEnemies.get(closestEnemyPos).ypos);
+				sumXY = diffX + diffY;
+				
+				for(int i=0; i < currentDirectionEnemies.size(); i++){
+					diffX = abs(midX - currentDirectionEnemies.get(i).xpos);
+					diffY = abs(midY - currentDirectionEnemies.get(i).ypos);
+					if(diffX+diffY <= sumXY){
+						sumXY = diffX + diffY;
+						closestEnemyPos = i;
+					}
 				}
-			}*/
-					
-			/*
-			 * Shoot just one enemy -> enemy closest to the center.
-			 * diffX = abs( centerX - enemyX )
-			 * diffY = abs( centerY - enemyY )
-			 * sumXY = diffX + diffY
-			 * 
-			 * The enemy with the smallest sumXY is the nearest to the center and should get shot.
-			 * 
-			 */
-			ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
-			float diffX = 0;
-			float diffY = 0;
-			float sumXY = 0;
-			int closestEnemyPos = 0;
-			diffX = abs(midX - currentDirectionEnemies.get(closestEnemyPos).xpos);
-			diffY = abs(midY - currentDirectionEnemies.get(closestEnemyPos).ypos);
-			sumXY = diffX + diffY;
-			
-			for(int i=0; i < currentDirectionEnemies.size(); i++){
-				diffX = abs(midX - currentDirectionEnemies.get(i).xpos);
-				diffY = abs(midY - currentDirectionEnemies.get(i).ypos);
-				if(diffX+diffY <= sumXY){
-					sumXY = diffX + diffY;
-					closestEnemyPos = i;
+				currentDirectionEnemies.get(closestEnemyPos).stopSound();
+				currentDirectionEnemies.remove(closestEnemyPos);
+				
+				// check if player has done level
+				if (lastEnemy) {
+					play=false;
+					lastEnemy = false;
+					enemyCount = 0;
+					removeAllEnemies();
+					if (level == LEVEL1)
+						level = LEVEL2_INTRO;
+					if (level == LEVEL2)
+						level = LEVEL3_INTRO;
+					if (level == LEVEL3)
+						level = OUTRO;
+				}
+				
+			} else {
+				System.out.println("miss");
+				miss.rewind();
+				miss.play();
+				missCounter++;
+				if (missCounter==3) {
+					delay(1000);
+					gameOver();
+					return false;
 				}
 			}
-			currentDirectionEnemies.get(closestEnemyPos).stopSound();
-			currentDirectionEnemies.remove(closestEnemyPos);
-			
-			// check if player has done level
-			if (lastEnemy) {
-				play=false;
-				lastEnemy = false;
-				enemyCount = 0;
-				removeAllEnemies();
-				if (level == LEVEL1)
-					level = LEVEL2_INTRO;
-				if (level == LEVEL2)
-					level = LEVEL3_INTRO;
-				if (level == LEVEL3)
-					level = OUTRO;
-			}
-			
-		} else {
-			System.out.println("miss");
-			miss.rewind();
-			miss.play();
-			missCounter++;
-			if (missCounter==3) {
-				delay(1000);
-				gameOver();
-				return false;
-			}
+		}
+		else{
+			no_ammo.rewind();
+			no_ammo.play();
 		}
 		
 		return targetvisible;
+	}
+	
+	public void reload() {
+		ammo = max_ammo;
+		reload.rewind();
+		reload.play();
 	}
 	
 	public void gameOver() {
