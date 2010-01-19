@@ -18,6 +18,17 @@ import processing.core.*;
  * @author patrick
  * */
 public class Sonar extends PApplet {
+	
+	
+	
+	// verbesserungsvorschläge
+	/*
+	 * kürzere soundintervalle beim uboot (und teufel)
+	 * besserer uboot sound
+	 * reload beim uboot
+	 * explosionssound
+	 * 
+	 */
 
 	public static final int NORTH = 0;
 	public static final int EAST = 1;
@@ -116,7 +127,6 @@ public class Sonar extends PApplet {
 	}
 
 	public void draw() {
-		System.out.println("enemies vallues "+getAllEnemiesSize());
 
 		if (play) {
 			background(255);
@@ -149,17 +159,16 @@ public class Sonar extends PApplet {
 	
 			enemyTimer++;
 			// determine a random direction
-			// Random random = new Random();
 			// int direction = random.nextInt(50000);
 	
 			if (enemyTimer == randomTime) {
 				if (enemyCount<maxEnemyCount) {
 					System.out.println("level: "+level);
-					if(level.equals("level1") && getAllEnemiesSize()==(0))
+					if(level.equals("level1") && getAllEnemiesSize()==0)
 						createEnemies();
-					else if(level.equals("level2") && getAllEnemiesSize()==(1))
+					else if(level.equals("level2") && getAllEnemiesSize()<=1)
 						createEnemies();
-					else if(level.equals("level3") && getAllEnemiesSize()==(1))
+					else if(level.equals("level3") && getAllEnemiesSize()<=1)
 						createEnemies();
 					enemyTimer = 0;
 					Random random = new Random();
@@ -241,7 +250,7 @@ public class Sonar extends PApplet {
 			enemies.get(direction).add(new Enemy(this, direction, enemyType, max_speed, min_speed));
 		}
 		
-		if(enemyCount==maxEnemyCount&&enemies.size()==0) {
+		if(enemyCount==maxEnemyCount) {
 			lastEnemy = true;
 			System.out.println("lastenemy");
 		}
@@ -285,9 +294,51 @@ public class Sonar extends PApplet {
 				//welcome.close();
 //				minim.stop();
 				play=true;
+				enemyCount = 0;
 				ammo = max_ammo;
 			}
 		}
+		
+		if(key == 'i'){
+			if (level==INTRO) {
+				if (introplayer.isPlaying()) introplayer.close();
+				level=START;
+				return;
+			}
+			if (level==START) {
+				if (welcome.isPlaying()) welcome.close();
+				if (outroplayer.isPlaying()) welcome.close();
+				level=LEVEL1_INTRO;
+				return;
+			}
+			else if (level==LEVEL1_INTRO) {
+				if (kapitel1player.isPlaying()) kapitel1player.close();
+				enemyType = Enemy.ZOMBIE;
+				level = LEVEL1;
+			}
+			else if (level==LEVEL2_INTRO) {
+				if (kapitel2player.isPlaying()) kapitel2player.close();
+				enemyType = Enemy.SUBMARINE;
+				level = LEVEL2;
+			}
+			else if (level==LEVEL3_INTRO) {
+				if (kapitel3player.isPlaying()) kapitel3player.close();
+				enemyType = Enemy.DEVIL;
+				level=LEVEL3;
+			}
+			else if (level==OUTRO) {
+				if (kapitel3player.isPlaying()) kapitel3player.close();
+				level=START;
+			}
+			if (!play) {
+				//welcome.close();
+//				minim.stop();
+				play=true;
+				ammo = max_ammo;
+			}
+		}
+		
+		
 		if (key == CODED) {
 			int currentDirection = player.getViewDirection();
 			if (keyCode == LEFT){
