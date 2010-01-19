@@ -48,7 +48,7 @@ public class Enemy {
 	 * @param p calling applet
 	 * @param pDirection defines the enemy's direction
 	 * */
-	public Enemy(PApplet p, int pDirection, float max_speed) {
+	public Enemy(PApplet p, int pDirection, float max_speed, float min_speed) {
 		parent = p;
 		gameover=false;
 		minim = new Minim(p);
@@ -58,6 +58,8 @@ public class Enemy {
 				
 		if(speed >= max_speed)
 			speed = max_speed;
+		else if(speed <= min_speed)
+			speed = min_speed;
 		
 		xspeed = speed;
 		yspeed = speed;
@@ -106,7 +108,7 @@ public class Enemy {
 		
 	}
 	
-	public Enemy(PApplet p, int pDirection, String type, float max_speed) {
+	public Enemy(PApplet p, int pDirection, String type, float max_speed, float min_speed) {
 		parent = p;
 		gameover=false;
 		minim = new Minim(p);
@@ -120,6 +122,9 @@ public class Enemy {
 		float speed = random.nextFloat();
 		if(speed >= max_speed)
 			speed = max_speed;
+		else if(speed <= min_speed)
+			speed = min_speed;
+		
 		xspeed = speed;
 		yspeed = speed;
 		

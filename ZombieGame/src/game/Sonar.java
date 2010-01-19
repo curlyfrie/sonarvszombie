@@ -44,6 +44,7 @@ public class Sonar extends PApplet {
 	private int midX;
 	private int midY;
 	private float max_speed = 0.4f;
+	private float min_speed = 0.0f;
 	/**
 	 * {@value Key: Direction} {@value List of Enemies in this direction}
 	 * */
@@ -98,7 +99,9 @@ public class Sonar extends PApplet {
 		gameover = minim.loadFile("/sounds/gameover.mp3");
 		miss = minim.loadFile("/sounds/miss.mp3");
 		shoot = minim.loadFile("/sounds/gunshot1.mp3");
+		shoot.setGain(-10);
 		rocket = minim.loadFile("/sounds/rocket.mp3");
+		rocket.setGain(-10);
 		no_ammo = minim.loadFile("/sounds/no_ammo.mp3");
 		reload = minim.loadFile("/sounds/shotgun_pump.mp3");
 		introplayer = minim.loadFile("/sounds/intro.mp3");
@@ -166,6 +169,7 @@ public class Sonar extends PApplet {
 				introplayer.play();
 			} else if (level==LEVEL1_INTRO) {
 				max_speed = 0.4f;
+				min_speed = 0.0f;
 				background(255);
 				fill(255,0,0);
 				text("†berspringen mit SPACE",midX,midY);
@@ -173,6 +177,7 @@ public class Sonar extends PApplet {
 				kapitel1player.play();
 			} else if (level==LEVEL2_INTRO) {
 				max_speed = 0.5f;
+				min_speed = 0.1f;
 				background(255);
 				fill(255,0,0);
 				text("†berspringen mit SPACE",midX,midY);
@@ -180,6 +185,7 @@ public class Sonar extends PApplet {
 				kapitel2player.play();
 			} else if (level==LEVEL3_INTRO) {
 				max_speed = 0.6f;
+				min_speed = 0.2f;
 				background(255);
 				fill(255,0,0);
 				text("†berspringen mit SPACE",midX,midY);
@@ -222,12 +228,12 @@ public class Sonar extends PApplet {
 		if (enemies.get(direction) == null) {
 			directionList = new ArrayList<Enemy>();
 			
-			directionList.add(new Enemy(this, direction, enemyType, max_speed));
+			directionList.add(new Enemy(this, direction, enemyType, max_speed, min_speed));
 
 			enemies.put(direction, directionList);
 			System.out.println("speed:"+enemies.get(direction).get(0).xspeed);
 		} else {
-			enemies.get(direction).add(new Enemy(this, direction, enemyType, max_speed));
+			enemies.get(direction).add(new Enemy(this, direction, enemyType, max_speed, min_speed));
 		}
 		
 		if(enemyCount==maxEnemyCount) {
