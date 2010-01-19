@@ -492,12 +492,12 @@ public class Sonar extends PApplet {
 				System.out.println("miss");
 				miss.rewind();
 				miss.play();
-				missCounter++;
+				/*missCounter++;
 				if (missCounter==3) {
 					delay(1000);
 					gameOver();
 					return false;
-				}
+				}*/
 			}
 		}
 		else{
