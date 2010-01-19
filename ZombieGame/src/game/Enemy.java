@@ -48,15 +48,17 @@ public class Enemy {
 	 * @param p calling applet
 	 * @param pDirection defines the enemy's direction
 	 * */
-	public Enemy(PApplet p, int pDirection) {
+	public Enemy(PApplet p, int pDirection, float max_speed) {
 		parent = p;
 		gameover=false;
 		minim = new Minim(p);
 		sound = minim.loadFile("/sounds/zombie.mp3");
 		Random random = new Random();
 		float speed = random.nextFloat();
-		if(speed >= 0.7)
-			speed = 0.7f;
+				
+		if(speed >= max_speed)
+			speed = max_speed;
+		
 		xspeed = speed;
 		yspeed = speed;
 		
@@ -104,7 +106,7 @@ public class Enemy {
 		
 	}
 	
-	public Enemy(PApplet p, int pDirection, String type) {
+	public Enemy(PApplet p, int pDirection, String type, float max_speed) {
 		parent = p;
 		gameover=false;
 		minim = new Minim(p);
@@ -116,6 +118,8 @@ public class Enemy {
 			sound = minim.loadFile("/sounds/devil.mp3");
 		Random random = new Random();
 		float speed = random.nextFloat();
+		if(speed >= max_speed)
+			speed = max_speed;
 		xspeed = speed;
 		yspeed = speed;
 		

@@ -43,6 +43,7 @@ public class Sonar extends PApplet {
 	private int randomTime;
 	private int midX;
 	private int midY;
+	private float max_speed = 0.4f;
 	/**
 	 * {@value Key: Direction} {@value List of Enemies in this direction}
 	 * */
@@ -85,7 +86,7 @@ public class Sonar extends PApplet {
 		enemyTimer = 0;
 		missCounter = 0;
 		Random random = new Random();
-		randomTime = random.nextInt(300) + 150;
+		randomTime = random.nextInt(50) + 150;
 
 		player = new Player(this);
 		// createEnemies();
@@ -144,7 +145,10 @@ public class Sonar extends PApplet {
 			// int direction = random.nextInt(50000);
 	
 			if (enemyTimer == randomTime) {
-				createEnemies();
+				if(level.equals("level1") && enemiesEmpty())
+					createEnemies();
+				else
+					createEnemies();
 				enemyTimer = 0;
 				Random random = new Random();
 				randomTime = random.nextInt(300) + 150;
@@ -156,18 +160,21 @@ public class Sonar extends PApplet {
 				textAlign(CENTER);
 				introplayer.play();
 			} else if (level==LEVEL1_INTRO) {
+				max_speed = 0.4f;
 				background(255);
 				fill(255,0,0);
 				text("†berspringen mit SPACE",midX,midY);
 				textAlign(CENTER);
 				kapitel1player.play();
 			} else if (level==LEVEL2_INTRO) {
+				max_speed = 0.5f;
 				background(255);
 				fill(255,0,0);
 				text("†berspringen mit SPACE",midX,midY);
 				textAlign(CENTER);
 				kapitel2player.play();
 			} else if (level==LEVEL3_INTRO) {
+				max_speed = 0.6f;
 				background(255);
 				fill(255,0,0);
 				text("†berspringen mit SPACE",midX,midY);
@@ -210,12 +217,12 @@ public class Sonar extends PApplet {
 		if (enemies.get(direction) == null) {
 			directionList = new ArrayList<Enemy>();
 			
-			directionList.add(new Enemy(this, direction,enemyType));
+			directionList.add(new Enemy(this, direction, enemyType, max_speed));
 
 			enemies.put(direction, directionList);
 			System.out.println("speed:"+enemies.get(direction).get(0).xspeed);
 		} else {
-			enemies.get(direction).add(new Enemy(this, direction,enemyType));
+			enemies.get(direction).add(new Enemy(this, direction, enemyType, max_speed));
 		}
 		
 		if(enemyCount==maxEnemyCount) {
@@ -512,6 +519,16 @@ public class Sonar extends PApplet {
 		ammo = max_ammo;
 		reload.rewind();
 		reload.play();
+	}
+	
+	public boolean enemiesEmpty() {
+		for(int i=0; i<numberDirections-1; i++){
+			if (enemies.get(i) != null && !enemies.get(i).isEmpty()){
+				//System.out.println("enemies auf "+i);
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public void gameOver() {
