@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="ZombieGame/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="ZombieGame/core.jar"/>
+	<classpathentry kind="lib" path="ZombieGame/jl1.0.jar"/>
+	<classpathentry kind="lib" path="ZombieGame/jsminim.jar"/>
+	<classpathentry kind="lib" path="ZombieGame/minim-spi.jar"/>
+	<classpathentry kind="lib" path="ZombieGame/minim.jar"/>
+	<classpathentry kind="lib" path="ZombieGame/mp3spi1.9.4.jar"/>
+	<classpathentry kind="lib" path="ZombieGame/tritonus_aos.jar"/>
+	<classpathentry kind="lib" path="ZombieGame/tritonus_share.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
