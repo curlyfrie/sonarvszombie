@@ -145,9 +145,12 @@ public class Sonar extends PApplet {
 			// int direction = random.nextInt(50000);
 	
 			if (enemyTimer == randomTime) {
-				if(level.equals("level1") && enemiesEmpty())
+				System.out.println("level: "+level);
+				if(level.equals("level1") && !moreThanXEnemies(0))
 					createEnemies();
-				else
+				else if(level.equals("level2") && !moreThanXEnemies(1))
+					createEnemies();
+				else if(level.equals("level3") && !moreThanXEnemies(1))
 					createEnemies();
 				enemyTimer = 0;
 				Random random = new Random();
@@ -529,6 +532,20 @@ public class Sonar extends PApplet {
 			}
 		}
 		return true;
+	}
+	
+	public boolean moreThanXEnemies(int number) {
+		int countZombies = 0;
+		for(int i=0; i<numberDirections-1; i++){
+			if (enemies.get(i) != null && !enemies.get(i).isEmpty()){
+				countZombies += enemies.get(i).size();
+			}
+		}
+		if(countZombies > number){
+			System.out.println("countZombies > "+number+". "+countZombies);
+			return true;
+		}
+		return false;
 	}
 	
 	public void gameOver() {
