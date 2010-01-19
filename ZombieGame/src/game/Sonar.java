@@ -274,6 +274,7 @@ public class Sonar extends PApplet {
 				//welcome.close();
 //				minim.stop();
 				play=true;
+				ammo = max_ammo;
 			}
 		}
 		if (key == CODED) {
@@ -437,91 +438,93 @@ public class Sonar extends PApplet {
 	 * */
 	public boolean targetLocked(){
 		boolean targetvisible = false;
-		if(ammo != 0){
-			ammo--;
-			
-			if (level.equals("level2")) {
-				rocket.rewind();
-				rocket.play();
-			}
-			else{
-				shoot.rewind();
-				shoot.play();
-			}
-		
-		
-			if (!enemies.isEmpty() && enemies.get(player.getViewDirection()) != null && enemies.get(player.getViewDirection()).size()>0) {
-				System.out.println(enemies.get(player.getViewDirection()).size());
-				/*Collection<ArrayList<Enemy>> temp = enemies.values();
+		if (play) {
+			if(ammo != 0){
+				ammo--;
 				
-				for (int i = 2; i < temp.size(); i++) {
-					for (ArrayList<Enemy> seekList : temp) {
-						for (int j = 0; j < seekList.size(); j++) {
-							if(seekList.get(j).getDirection() == player.getViewDirection()){
-								seekList.remove(seekList.get(j));
+				if (level.equals("level2")) {
+					rocket.rewind();
+					rocket.play();
+				}
+				else{
+					shoot.rewind();
+					shoot.play();
+				}
+			
+			
+				if (!enemies.isEmpty() && enemies.get(player.getViewDirection()) != null && enemies.get(player.getViewDirection()).size()>0) {
+					System.out.println(enemies.get(player.getViewDirection()).size());
+					/*Collection<ArrayList<Enemy>> temp = enemies.values();
+					
+					for (int i = 2; i < temp.size(); i++) {
+						for (ArrayList<Enemy> seekList : temp) {
+							for (int j = 0; j < seekList.size(); j++) {
+								if(seekList.get(j).getDirection() == player.getViewDirection()){
+									seekList.remove(seekList.get(j));
+								}
 							}
 						}
+					}*/
+							
+					/*
+					 * Shoot just one enemy -> enemy closest to the center.
+					 * diffX = abs( centerX - enemyX )
+					 * diffY = abs( centerY - enemyY )
+					 * sumXY = diffX + diffY
+					 * 
+					 * The enemy with the smallest sumXY is the nearest to the center and should get shot.
+					 * 
+					 */
+					ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
+					float diffX = 0;
+					float diffY = 0;
+					float sumXY = 0;
+					int closestEnemyPos = 0;
+					diffX = abs(midX - currentDirectionEnemies.get(closestEnemyPos).xpos);
+					diffY = abs(midY - currentDirectionEnemies.get(closestEnemyPos).ypos);
+					sumXY = diffX + diffY;
+					
+					for(int i=0; i < currentDirectionEnemies.size(); i++){
+						diffX = abs(midX - currentDirectionEnemies.get(i).xpos);
+						diffY = abs(midY - currentDirectionEnemies.get(i).ypos);
+						if(diffX+diffY <= sumXY){
+							sumXY = diffX + diffY;
+							closestEnemyPos = i;
+						}
 					}
-				}*/
-						
-				/*
-				 * Shoot just one enemy -> enemy closest to the center.
-				 * diffX = abs( centerX - enemyX )
-				 * diffY = abs( centerY - enemyY )
-				 * sumXY = diffX + diffY
-				 * 
-				 * The enemy with the smallest sumXY is the nearest to the center and should get shot.
-				 * 
-				 */
-				ArrayList<Enemy> currentDirectionEnemies = enemies.get(player.getViewDirection());
-				float diffX = 0;
-				float diffY = 0;
-				float sumXY = 0;
-				int closestEnemyPos = 0;
-				diffX = abs(midX - currentDirectionEnemies.get(closestEnemyPos).xpos);
-				diffY = abs(midY - currentDirectionEnemies.get(closestEnemyPos).ypos);
-				sumXY = diffX + diffY;
-				
-				for(int i=0; i < currentDirectionEnemies.size(); i++){
-					diffX = abs(midX - currentDirectionEnemies.get(i).xpos);
-					diffY = abs(midY - currentDirectionEnemies.get(i).ypos);
-					if(diffX+diffY <= sumXY){
-						sumXY = diffX + diffY;
-						closestEnemyPos = i;
+					currentDirectionEnemies.get(closestEnemyPos).stopSound();
+					currentDirectionEnemies.remove(closestEnemyPos);
+					
+					// check if player has done level
+					if (lastEnemy) {
+						play=false;
+						lastEnemy = false;
+						enemyCount = 0;
+						removeAllEnemies();
+						if (level == LEVEL1)
+							level = LEVEL2_INTRO;
+						if (level == LEVEL2)
+							level = LEVEL3_INTRO;
+						if (level == LEVEL3)
+							level = OUTRO;
 					}
+					
+				} else {
+					System.out.println("miss");
+					miss.rewind();
+					miss.play();
+					/*missCounter++;
+					if (missCounter==3) {
+						delay(1000);
+						gameOver();
+						return false;
+					}*/
 				}
-				currentDirectionEnemies.get(closestEnemyPos).stopSound();
-				currentDirectionEnemies.remove(closestEnemyPos);
-				
-				// check if player has done level
-				if (lastEnemy) {
-					play=false;
-					lastEnemy = false;
-					enemyCount = 0;
-					removeAllEnemies();
-					if (level == LEVEL1)
-						level = LEVEL2_INTRO;
-					if (level == LEVEL2)
-						level = LEVEL3_INTRO;
-					if (level == LEVEL3)
-						level = OUTRO;
-				}
-				
-			} else {
-				System.out.println("miss");
-				miss.rewind();
-				miss.play();
-				/*missCounter++;
-				if (missCounter==3) {
-					delay(1000);
-					gameOver();
-					return false;
-				}*/
 			}
-		}
-		else{
-			no_ammo.rewind();
-			no_ammo.play();
+			else{
+				no_ammo.rewind();
+				no_ammo.play();
+			}
 		}
 		
 		return targetvisible;
