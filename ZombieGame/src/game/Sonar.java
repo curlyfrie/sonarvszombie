@@ -98,7 +98,7 @@ public class Sonar extends PApplet {
 		gameover = minim.loadFile("/sounds/gameover.mp3");
 		miss = minim.loadFile("/sounds/miss.mp3");
 		shoot = minim.loadFile("/sounds/gunshot1.mp3");
-		rocket = minim.loadFile("/sounds/rocket.mp3");
+		rocket = minim.loadFile("/sounds/rocket.wav");
 		no_ammo = minim.loadFile("/sounds/no_ammo.mp3");
 		reload = minim.loadFile("/sounds/shotgun_pump.mp3");
 		introplayer = minim.loadFile("/sounds/intro.mp3");
@@ -438,11 +438,13 @@ public class Sonar extends PApplet {
 		boolean targetvisible = false;
 		if(ammo != 0){
 			ammo--;
-			shoot.rewind();
+			
 			if (level.equals("level2")) {
+				rocket.rewind();
 				rocket.play();
 			}
 			else
+				shoot.rewind();
 				shoot.play();
 		
 		
