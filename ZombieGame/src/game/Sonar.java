@@ -103,11 +103,11 @@ public class Sonar extends PApplet {
 		reload = minim.loadFile("/sounds/shotgun_pump.mp3");
 		introplayer = minim.loadFile("/sounds/intro.mp3");
 		outroplayer = minim.loadFile("/sounds/outro.mp3");
-		kapitel1player = minim.loadFile("/sounds/kapitel1.mp3");
+		kapitel1player = minim.loadFile("/sounds/intro_long.mp3");
 		kapitel2player = minim.loadFile("/sounds/kapitel2.mp3");
 		kapitel3player = minim.loadFile("/sounds/kapitel3.mp3");
 		
-		level = INTRO;
+		level = START;
 		
 	}
 
