@@ -234,6 +234,7 @@ public class Sonar extends PApplet {
 			lastEnemy = true;
 			System.out.println("lastenemy");
 		}
+		
 
 	}
 
