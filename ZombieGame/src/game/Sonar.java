@@ -562,7 +562,8 @@ public class Sonar extends PApplet {
 		removeAllEnemies();
 		text("oh no! it's over! :((((((((((((",100,100);
 		gameover.play();
-		
+		enemyCount = 0;
+		ammo = max_ammo;
 		
 	}
 	
