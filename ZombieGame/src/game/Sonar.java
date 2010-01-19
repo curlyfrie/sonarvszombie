@@ -115,6 +115,8 @@ public class Sonar extends PApplet {
 	}
 
 	public void draw() {
+		System.out.println("enemies vallues "+enemies.values().size());
+
 		if (play) {
 			background(255);
 			//visual pointer in the middle
@@ -150,16 +152,18 @@ public class Sonar extends PApplet {
 			// int direction = random.nextInt(50000);
 	
 			if (enemyTimer == randomTime) {
-				System.out.println("level: "+level);
-				if(level.equals("level1") && !moreThanXEnemies(0))
-					createEnemies();
-				else if(level.equals("level2") && !moreThanXEnemies(1))
-					createEnemies();
-				else if(level.equals("level3") && !moreThanXEnemies(1))
-					createEnemies();
-				enemyTimer = 0;
-				Random random = new Random();
-				randomTime = random.nextInt(300) + 150;
+				if (enemyCount<maxEnemyCount) {
+					System.out.println("level: "+level);
+					if(level.equals("level1") && !moreThanXEnemies(0))
+						createEnemies();
+					else if(level.equals("level2") && !moreThanXEnemies(1))
+						createEnemies();
+					else if(level.equals("level3") && !moreThanXEnemies(1))
+						createEnemies();
+					enemyTimer = 0;
+					Random random = new Random();
+					randomTime = random.nextInt(300) + 150;
+				}
 			}
 			} else if (level==INTRO) {
 				background(255);
@@ -236,7 +240,7 @@ public class Sonar extends PApplet {
 			enemies.get(direction).add(new Enemy(this, direction, enemyType, max_speed, min_speed));
 		}
 		
-		if(enemyCount==maxEnemyCount) {
+		if(enemyCount==maxEnemyCount&&enemies.size()==0) {
 			lastEnemy = true;
 			System.out.println("lastenemy");
 		}
