@@ -85,7 +85,7 @@ public class Sonar extends PApplet {
 		enemyTimer = 0;
 		missCounter = 0;
 		Random random = new Random();
-		randomTime = random.nextInt(200) + 100;
+		randomTime = random.nextInt(300) + 150;
 
 		player = new Player(this);
 		// createEnemies();
@@ -96,8 +96,8 @@ public class Sonar extends PApplet {
 		gameover = minim.loadFile("/sounds/gameover.mp3");
 		miss = minim.loadFile("/sounds/miss.mp3");
 		shoot = minim.loadFile("/sounds/gunshot1.mp3");
-		no_ammo = minim.loadFile("/sounds/emptychamber.wav");
-		reload = minim.loadFile("/sounds/reload1.mp3");
+		no_ammo = minim.loadFile("/sounds/no_ammo.mp3");
+		reload = minim.loadFile("/sounds/shotgun_pump.mp3");
 		introplayer = minim.loadFile("/sounds/intro.mp3");
 		outroplayer = minim.loadFile("/sounds/outro.mp3");
 		kapitel1player = minim.loadFile("/sounds/kapitel1.mp3");
@@ -147,7 +147,7 @@ public class Sonar extends PApplet {
 				createEnemies();
 				enemyTimer = 0;
 				Random random = new Random();
-				randomTime = random.nextInt(200) + 100;
+				randomTime = random.nextInt(300) + 150;
 			}
 			} else if (level==INTRO) {
 				background(255);
@@ -213,6 +213,7 @@ public class Sonar extends PApplet {
 			directionList.add(new Enemy(this, direction,enemyType));
 
 			enemies.put(direction, directionList);
+			System.out.println("speed:"+enemies.get(direction).get(0).xspeed);
 		} else {
 			enemies.get(direction).add(new Enemy(this, direction,enemyType));
 		}

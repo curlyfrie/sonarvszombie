@@ -55,6 +55,8 @@ public class Enemy {
 		sound = minim.loadFile("/sounds/zombie.mp3");
 		Random random = new Random();
 		float speed = random.nextFloat();
+		if(speed >= 0.7)
+			speed = 0.7f;
 		xspeed = speed;
 		yspeed = speed;
 		
