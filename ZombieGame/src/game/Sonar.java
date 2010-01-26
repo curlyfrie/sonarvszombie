@@ -80,6 +80,7 @@ public class Sonar extends PApplet {
 	private AudioPlayer rocket;
 	private AudioPlayer no_ammo;
 	private AudioPlayer reload;
+	private AudioPlayer s_reload;
 	private int welcomeTimer;
 	private int missCounter;
 	private int enemyCount;
@@ -89,6 +90,7 @@ public class Sonar extends PApplet {
 	private String enemyType;
 	
 	private PGraphics view;
+
 
 
 	/**
@@ -127,6 +129,7 @@ public class Sonar extends PApplet {
 		rocket.setGain(-10);
 		no_ammo = minim.loadFile("/sounds/no_ammo.mp3");
 		reload = minim.loadFile("/sounds/shotgun_pump.mp3");
+		s_reload = minim.loadFile("/sounds/s_reload.mp3");
 		introplayer = minim.loadFile("/sounds/intro.mp3");
 		outroplayer = minim.loadFile("/sounds/outro.mp3");
 		kapitel1player = minim.loadFile("/sounds/intro_long.mp3");
@@ -327,7 +330,7 @@ public class Sonar extends PApplet {
 			}
 			if (level==START) {
 				if (welcome.isPlaying()) welcome.close();
-				if (outroplayer.isPlaying()) welcome.close();
+				if (outroplayer.isPlaying()) outroplayer.close();
 				level=LEVEL1_INTRO;
 				return;
 			}
@@ -372,7 +375,7 @@ public class Sonar extends PApplet {
 				player.setViewDirection(getRightDirection(currentDirection));
 			}
 			else if (keyCode == CONTROL){
-				if((!shoot.isPlaying() || !rocket.isPlaying()) && !reload.isPlaying()){
+				if((!shoot.isPlaying() || !rocket.isPlaying()) && (!reload.isPlaying() && !s_reload.isPlaying())){
 					targetLocked();
 				}
 			}
@@ -633,8 +636,13 @@ public class Sonar extends PApplet {
 	
 	public void reload() {
 		ammo = max_ammo;
-		reload.rewind();
-		reload.play();
+		if (level==LEVEL2) {
+			s_reload.rewind();
+			s_reload.play();
+		} else {
+			reload.rewind();
+			reload.play();
+		}
 	}
 	
 	public boolean enemiesEmpty() {
