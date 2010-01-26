@@ -13,6 +13,7 @@ import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
 import processing.core.*;
+import sun.java2d.loops.DrawRect;
 
 /**
  * @author patrick
@@ -70,6 +71,9 @@ public class Sonar extends PApplet {
 	private AudioPlayer kapitel1player;
 	private AudioPlayer kapitel2player;
 	private AudioPlayer kapitel3player;
+	private AudioPlayer level1hitplayer;
+	private AudioPlayer level2hitplayer;
+	private AudioPlayer level3hitplayer;
 	private AudioPlayer gameover;
 	private AudioPlayer miss;
 	private AudioPlayer shoot;
@@ -83,6 +87,8 @@ public class Sonar extends PApplet {
 	private int ammo = max_ammo;
 	private boolean lastEnemy;
 	private String enemyType;
+	
+	private PGraphics view;
 
 
 	/**
@@ -90,6 +96,11 @@ public class Sonar extends PApplet {
 	 * */
 	public void setup() {
 		size(400, 400);
+		
+		 view = createGraphics(width, height, P3D);
+		
+
+		
 		play = false;
 		myFont = createFont("verdana", 12);
 		textFont(myFont);
@@ -121,6 +132,9 @@ public class Sonar extends PApplet {
 		kapitel1player = minim.loadFile("/sounds/intro_long.mp3");
 		kapitel2player = minim.loadFile("/sounds/kapitel2.mp3");
 		kapitel3player = minim.loadFile("/sounds/kapitel3.mp3");
+		level1hitplayer = minim.loadFile("/sounds/z_hit.mp3");
+		level2hitplayer = minim.loadFile("/sounds/s_hit.mp3");
+		level3hitplayer = minim.loadFile("/sounds/d_hit.mp3");
 		
 		level = START;
 		
@@ -133,14 +147,24 @@ public class Sonar extends PApplet {
 			//visual pointer in the middle
 			fill(0);
 			ellipse(midX, midY, 4, 4);
-			if(player.getViewDirection() == NORTH)
+		
+			  
+			
+
+			
+			
+			
+			
+			if(player.getViewDirection() == NORTH) {
 				line(midX, midY, midX, midY-10);
-			else if(player.getViewDirection() == SOUTH)
+			} else if(player.getViewDirection() == SOUTH) {
 				line(midX, midY, midX, midY+10);
-			else if(player.getViewDirection() == WEST)
+			} else if(player.getViewDirection() == WEST) {
 				line(midX, midY, midX-10, midY);
-			else if(player.getViewDirection() == EAST)
+			} else if(player.getViewDirection() == EAST) {
 				line(midX, midY, midX+10, midY);
+			}
+			
 	
 			if (!enemies.isEmpty()) {
 				Collection<ArrayList<Enemy>> temp = enemies.values();
@@ -161,6 +185,9 @@ public class Sonar extends PApplet {
 			// determine a random direction
 			// int direction = random.nextInt(50000);
 	
+			drawView();
+			
+			
 			if (enemyTimer == randomTime) {
 				if (enemyCount<maxEnemyCount) {
 					System.out.println("level: "+level);
@@ -221,6 +248,39 @@ public class Sonar extends PApplet {
 	//			welcome.setPan(0);
 				welcome.play();
 			}
+	}
+
+	private void drawView() {
+		
+		 
+		 if (level==LEVEL1) {
+			 fill(0);
+			 if(player.getViewDirection() == NORTH) {
+				 triangle(0, height, width, height, 0, 0);
+				 triangle(width, height, 0, height, width, 0);
+			 } else if(player.getViewDirection() == SOUTH) {
+				 triangle(0, 0, 0, height, width, 0);
+				 triangle(0, 0, width, height, width, 0);
+			 } else if(player.getViewDirection() == WEST) {
+				 triangle(0, height, width, height, width, 0);
+				 triangle(width, height, 0, 0, width, 0);
+			 } else if(player.getViewDirection() == EAST) {
+				 triangle(0, 0, width, 0, 0, height);
+				 triangle(0, 0, 0, height, width,height);
+			 }
+		 } else if (level==LEVEL2) {
+			 fill(8,23,66);
+			 rect(0, 0, width, height);
+			 fill(255);
+			 text("submarines without lights suck!",100,100);
+		} else if (level==LEVEL3) {
+			fill(51,1,2);
+			rect(0, 0, WIDTH, HEIGHT);
+			fill(255);
+			 text("whoopsie, must have forgotten my lamp!",100,100);
+		}
+		
+		
 	}
 
 	/**
@@ -297,45 +357,7 @@ public class Sonar extends PApplet {
 				enemyCount = 0;
 				ammo = max_ammo;
 			}
-		}
 		
-		if(key == 'i'){
-			if (level==INTRO) {
-				if (introplayer.isPlaying()) introplayer.close();
-				level=START;
-				return;
-			}
-			if (level==START) {
-				if (welcome.isPlaying()) welcome.close();
-				if (outroplayer.isPlaying()) welcome.close();
-				level=LEVEL1_INTRO;
-				return;
-			}
-			else if (level==LEVEL1_INTRO) {
-				if (kapitel1player.isPlaying()) kapitel1player.close();
-				enemyType = Enemy.ZOMBIE;
-				level = LEVEL1;
-			}
-			else if (level==LEVEL2_INTRO) {
-				if (kapitel2player.isPlaying()) kapitel2player.close();
-				enemyType = Enemy.SUBMARINE;
-				level = LEVEL2;
-			}
-			else if (level==LEVEL3_INTRO) {
-				if (kapitel3player.isPlaying()) kapitel3player.close();
-				enemyType = Enemy.DEVIL;
-				level=LEVEL3;
-			}
-			else if (level==OUTRO) {
-				if (kapitel3player.isPlaying()) kapitel3player.close();
-				level=START;
-			}
-			if (!play) {
-				//welcome.close();
-//				minim.stop();
-				play=true;
-				ammo = max_ammo;
-			}
 		}
 		
 		
@@ -557,6 +579,9 @@ public class Sonar extends PApplet {
 					currentDirectionEnemies.get(closestEnemyPos).stopSound();
 					currentDirectionEnemies.remove(closestEnemyPos);
 					
+					
+					// hit sounds
+					
 					// check if player has done level
 					if (lastEnemy) {
 						play=false;
@@ -570,6 +595,20 @@ public class Sonar extends PApplet {
 						if (level == LEVEL3)
 							level = OUTRO;
 					}
+					
+					if (level==LEVEL1) {
+						delay(250);
+						level1hitplayer.rewind();
+						level1hitplayer.play(100);
+					} else if (level==LEVEL2) {
+						delay(300);
+						level2hitplayer.rewind();
+						level2hitplayer.play();
+					} else if (level==LEVEL3) {
+						delay(250);
+						level3hitplayer.rewind();
+						level3hitplayer.play();
+					}					
 					
 				} else {
 					System.out.println("miss");
@@ -626,6 +665,7 @@ public class Sonar extends PApplet {
 		play = false;
 		removeAllEnemies();
 		text("oh no! it's over! :((((((((((((",100,100);
+		text("press space to play again",200,200);
 		gameover.play();
 		enemyCount = 0;
 		ammo = max_ammo;

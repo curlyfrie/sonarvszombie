@@ -115,9 +115,9 @@ public class Enemy {
 		if (type == ZOMBIE)
 			sound = minim.loadFile("/sounds/zombie.mp3");
 		if (type == SUBMARINE)
-			sound = minim.loadFile("/sounds/sonar.mp3");
+			sound = minim.loadFile("/sounds/sonar2.mp3");
 		if (type == DEVIL)
-			sound = minim.loadFile("/sounds/devil.mp3");
+			sound = minim.loadFile("/sounds/devil2.mp3");
 		Random random = new Random();
 		float speed = random.nextFloat();
 		if(speed >= max_speed)
