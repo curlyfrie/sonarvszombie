@@ -275,7 +275,7 @@ public class Sonar extends PApplet {
 			 text("submarines without lights suck!",100,100);
 		} else if (level==LEVEL3) {
 			fill(51,1,2);
-			rect(0, 0, WIDTH, HEIGHT);
+			rect(0, 0, width, height);
 			fill(255);
 			 text("whoopsie, must have forgotten my lamp!",100,100);
 		}
