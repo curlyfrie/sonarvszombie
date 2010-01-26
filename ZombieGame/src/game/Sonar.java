@@ -205,7 +205,7 @@ public class Sonar extends PApplet {
 			} else if (level==INTRO) {
 				background(255);
 				fill(255,0,0);
-				text("Überspringen mit SPACE",midX,midY);
+				text("Ueberspringen mit SPACE",midX,midY);
 				textAlign(CENTER);
 				introplayer.play();
 			} else if (level==LEVEL1_INTRO) {
@@ -213,7 +213,7 @@ public class Sonar extends PApplet {
 				min_speed = 0.0f;
 				background(255);
 				fill(255,0,0);
-				text("Überspringen mit SPACE",midX,midY);
+				text("Ueberspringen mit SPACE",midX,midY);
 				textAlign(CENTER);
 				kapitel1player.play();
 			} else if (level==LEVEL2_INTRO) {
@@ -221,7 +221,7 @@ public class Sonar extends PApplet {
 				min_speed = 0.1f;
 				background(255);
 				fill(255,0,0);
-				text("Überspringen mit SPACE",midX,midY);
+				text("Ueberspringen mit SPACE",midX,midY);
 				textAlign(CENTER);
 				kapitel2player.play();
 			} else if (level==LEVEL3_INTRO) {
@@ -229,13 +229,13 @@ public class Sonar extends PApplet {
 				min_speed = 0.2f;
 				background(255);
 				fill(255,0,0);
-				text("Überspringen mit SPACE",midX,midY);
+				text("Ueberspringen mit SPACE",midX,midY);
 				textAlign(CENTER);
 				kapitel3player.play();
 			} else if (level==OUTRO) {
 				background(255);
 				fill(255,0,0);
-				text("Danke fürs Spielen. Lg Gott",midX,midY);
+				text("Danke fuers Spielen. Lg Gott",midX,midY);
 				textAlign(CENTER);
 				outroplayer.play();
 				
@@ -272,12 +272,12 @@ public class Sonar extends PApplet {
 			 fill(8,23,66);
 			 rect(0, 0, width, height);
 			 fill(255);
-			 text("submarines without lights suck!",100,100);
+			 text("    submarines without lights suck!",100,100);
 		} else if (level==LEVEL3) {
 			fill(51,1,2);
 			rect(0, 0, width, height);
 			fill(255);
-			 text("whoopsie, must have forgotten my lamp!",100,100);
+			 text("    whoopsie, must have forgotten my lamp!",100,100);
 		}
 		
 		
