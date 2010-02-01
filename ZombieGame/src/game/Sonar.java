@@ -88,8 +88,15 @@ public class Sonar extends PApplet {
 	private int ammo = max_ammo;
 	private boolean lastEnemy;
 	private String enemyType;
+	private PImage img;
 	
-	private PGraphics view;
+	
+	
+	//public Sonar(){ super(); init();}
+
+	public static void main(String args[]) {
+		PApplet.main(new String[] {"game.Sonar" });
+	} 
 
 
 
@@ -99,7 +106,6 @@ public class Sonar extends PApplet {
 	public void setup() {
 		size(400, 400);
 		
-		 view = createGraphics(width, height, P3D);
 		
 
 		
@@ -138,7 +144,7 @@ public class Sonar extends PApplet {
 		level1hitplayer = minim.loadFile("/sounds/z_hit.mp3");
 		level2hitplayer = minim.loadFile("/sounds/s_hit.mp3");
 		level3hitplayer = minim.loadFile("/sounds/d_hit.mp3");
-		
+		img = loadImage("pics/zombie.png");
 		level = START;
 		
 	}
@@ -244,8 +250,14 @@ public class Sonar extends PApplet {
 				
 			} else if (level==START){
 				background(255);
+				
+				image(img,0,0);
+
 				fill(255,0,0);
 				text("Welcome to Zombie Game! Press SPACE to begin",midX,midY);
+				textAlign(CENTER);
+				text("use LEFT and RIGHT to change direction",midX,midY+30);
+				text("use CRTL to shoot and SHIFT to reload",midX,midY+60);
 				textAlign(CENTER);
 	//			welcome.setGain(0);
 	//			welcome.setPan(0);
@@ -275,12 +287,15 @@ public class Sonar extends PApplet {
 			 fill(8,23,66);
 			 rect(0, 0, width, height);
 			 fill(255);
-			 text("    submarines without lights suck!",100,100);
+			 text("uboote ohne scheinwerfer stinken!",200,200);
+			 textAlign(CENTER);
 		} else if (level==LEVEL3) {
 			fill(51,1,2);
 			rect(0, 0, width, height);
 			fill(255);
-			 text("    whoopsie, must have forgotten my lamp!",100,100);
+			 text("whooopsie, ich hab meine taschenlampe vergessen!",200,200);
+			 textAlign(CENTER);
+			 
 		}
 		
 		
@@ -350,8 +365,8 @@ public class Sonar extends PApplet {
 				level=LEVEL3;
 			}
 			else if (level==OUTRO) {
-				if (kapitel3player.isPlaying()) kapitel3player.close();
-				level=START;
+				if (outroplayer.isPlaying()) outroplayer.close();
+				//level=START;
 			}
 			if (!play) {
 				//welcome.close();
@@ -582,8 +597,21 @@ public class Sonar extends PApplet {
 					currentDirectionEnemies.get(closestEnemyPos).stopSound();
 					currentDirectionEnemies.remove(closestEnemyPos);
 					
-					
+					// bla
 					// hit sounds
+					if (level==LEVEL1) {
+						delay(250);
+						level1hitplayer.rewind();
+						level1hitplayer.play(100);
+					} else if (level==LEVEL2) {
+						delay(300);
+						level2hitplayer.rewind();
+						level2hitplayer.play();
+					} else if (level==LEVEL3) {
+						delay(250);
+						level3hitplayer.rewind();
+						level3hitplayer.play();
+					}					
 					
 					// check if player has done level
 					if (lastEnemy) {
@@ -599,19 +627,6 @@ public class Sonar extends PApplet {
 							level = OUTRO;
 					}
 					
-					if (level==LEVEL1) {
-						delay(250);
-						level1hitplayer.rewind();
-						level1hitplayer.play(100);
-					} else if (level==LEVEL2) {
-						delay(300);
-						level2hitplayer.rewind();
-						level2hitplayer.play();
-					} else if (level==LEVEL3) {
-						delay(250);
-						level3hitplayer.rewind();
-						level3hitplayer.play();
-					}					
 					
 				} else {
 					System.out.println("miss");
